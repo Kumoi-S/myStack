@@ -1,6 +1,6 @@
 # Requirements
 
-dyl-stack uses skills and subagents from other collections. Check the dependencies your workflow needs. Use the sibling collections in this checkout or load them in your agent. If a required skill, subagent, or MCP connection is unavailable, name it before continuing.
+dyl-stack uses skills and subagents from other collections. Check the dependencies your workflow needs. Use the collections in this checkout or load them in your agent. If a required skill, subagent, or MCP connection is unavailable, name it before continuing.
 
 | Collection or integration | Available when | Reach its files |
 |---|---|---|

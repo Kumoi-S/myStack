@@ -4,8 +4,8 @@ on:
   pull_request:
     paths:
       - "pstack/**"
-      - "cursor-team-kit/skills/**"
-      - "scripts/check-pstack-docs.mjs"
+      - "cursor-origin/cursor-team-kit/skills/**"
+      - "cursor-origin/scripts/check-pstack-docs.mjs"
       - ".github/workflows/validate-skills.yml"
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         run: npm install --no-save --package-lock=false fast-check@4.5.3
 
       - name: Check pstack documentation
-        run: node scripts/check-pstack-docs.mjs
+        run: node cursor-origin/scripts/check-pstack-docs.mjs
 
       - name: Test pstack skill scripts
         run: node --disable-warning=ExperimentalWarning --test pstack/skills/*/scripts/test/*.test.ts

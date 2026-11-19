@@ -8,8 +8,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const PSTACK = join(ROOT, "pstack");
+const CURSOR_ORIGIN = join(dirname(fileURLToPath(import.meta.url)), "..");
+const PSTACK = join(CURSOR_ORIGIN, "..", "pstack");
 const GUIDE = "docs/guide";
 const SETUP = join(PSTACK, "skills", "setup-pstack", "SKILL.md");
 
@@ -39,7 +39,7 @@ const principles = skills.filter((name) => name.startsWith("principle-"));
 const commands = skills.filter((name) => !name.startsWith("principle-"));
 const playbooks = names(join(PSTACK, "skills", "poteto-mode", "playbooks"), isMarkdown).map((name) => name.slice(0, -3));
 const agents = names(join(PSTACK, "agents"), isMarkdown).map((name) => name.slice(0, -3));
-const teamKit = names(join(ROOT, "cursor-team-kit", "skills"), isSkill);
+const teamKit = names(join(CURSOR_ORIGIN, "cursor-team-kit", "skills"), isSkill);
 const docs = ["README.md", ...names(join(PSTACK, GUIDE), isMarkdown).map((name) => `${GUIDE}/${name}`)];
 const text = new Map(docs.map((doc) => [doc, readFileSync(join(PSTACK, doc), "utf8")]));
 const setup = readFileSync(SETUP, "utf8");
