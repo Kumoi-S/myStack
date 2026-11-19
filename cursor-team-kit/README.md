@@ -1,12 +1,10 @@
-# Cursor Team Kit plugin
+# Cursor Team Kit
 
 Internal-style workflows for CI, code review, shipping, and test reliability. The kit is designed to be plug and play without requiring third-party service integrations.
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin cursor-team-kit
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Components
 

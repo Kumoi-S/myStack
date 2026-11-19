@@ -4,13 +4,9 @@ Cursor plugin that connects agents to [Google Docs](https://docs.google.com) thr
 
 Read document structure and text, create documents, insert and replace text, delete content ranges, and apply paragraph styles.
 
-## Install
+## Use the skill
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **Google Docs**.
-3. Click **Install**, then complete the Google sign-in prompt.
-
-Or run `/add-plugin google-docs` in chat.
+Load [`google-docs`](skills/google-docs/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

@@ -17,11 +17,11 @@ reminder: New task? Playbook match or rigor needed -> apply /dyl-mode. Casual tu
 
 Thin router over pstack's `poteto-mode`. Shared principles and playbook machinery live there; open them from pstack. Dylan gates win on conflict.
 
-**Requires** `pstack` and `cursor-team-kit`. Check first with [references/requirements.md](references/requirements.md), which also says how to reach pstack's hidden skills. Missing → stop and tell the user to run `/add-plugin <name>`.
+**Requires** `pstack` and `cursor-team-kit`. Check first with [references/requirements.md](references/requirements.md), which also says how to reach pstack's hidden skills. If a dependency is missing, tell the user which skills, agents, or tools to load.
 
 **Routing.** `/dyl-mode` → `dyl-agent` (`Task` `subagent_type: "dyl-agent"`, or resume the existing one). Do not inline this skill into `generalPurpose`.
 
-## Sibling skills (this plugin)
+## Sibling skills
 
 | Slash | Job |
 |-------|-----|

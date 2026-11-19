@@ -10,13 +10,9 @@ Use your X Money Card, send money to users on X, manage your finances, view your
 - An active X Money account. X Money is available to eligible customers in the United States.
 - Not available in Cursor. Cursor must not list or install this plugin.
 
-## Install
+## Use the skill
 
-1. Open **Grok Bot → Plugins**.
-2. Search for **X Money**.
-3. Click **Install**, then complete the X Money connection when prompted.
-
-Or ask the agent to connect your X Money account.
+Load [`x-money-guide`](skills/x-money-guide/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

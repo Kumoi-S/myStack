@@ -1,18 +1,12 @@
 # Set up pstack
 
-In this page you install the plugin, pick which models pstack uses, and run your first task. Setup is one command plus a short conversation.
+Load the skills, pick which models pstack uses, and run your first task.
 
-## Install the plugin
+## Load the skills
 
-In a Cursor chat, run:
+Copy or link the directories from [pstack/skills/](../../skills/) into your agent's skill directory. For workflows that delegate, register the definitions from [pstack/agents/](../../agents/) using your agent's subagent configuration. Keep the pstack checkout available so skills can open its playbooks and docs.
 
-```text
-/add-plugin pstack
-```
-
-Cursor confirms the plugin is installed.
-
-In Claude Code, run `/plugin marketplace add cursor/plugins`, then `/plugin install pstack@cursor-plugins`. Claude Code prefixes plugin commands, so each command in this guide takes a `pstack:` prefix there, such as `/pstack:setup-pstack`, which writes its model rule to `~/.claude/rules/pstack-models.md`. The [Claude Code adapter](../harness/claude-code.md) covers the other differences.
+In Claude Code, see the [Claude Code adapter](../harness/claude-code.md) for tool, subagent, and model mappings.
 
 ## Pick your models
 

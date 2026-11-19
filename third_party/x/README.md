@@ -4,13 +4,9 @@ Cursor plugin that connects agents to the [X API](https://docs.x.com) through X'
 
 This plugin signs you in with OAuth as your own X account. It is no longer read-only: alongside searching and reading public X data, agents can publish posts you approve, manage your lists, bookmarks, blocks, and mutes, call X Chat endpoints, and schedule X calls.
 
-## Install
+## Use the skill
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **X**.
-3. Click **Install**, then complete the OAuth sign-in when prompted.
-
-Or run `/add-plugin x` in chat.
+Load [`x-api-mcp-guide`](skills/x-api-mcp-guide/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

@@ -4,13 +4,9 @@ Cursor plugin that connects agents to [Google Drive](https://drive.google.com) t
 
 Search Drive, read file metadata and contents, create or update files, and manage sharing.
 
-## Install
+## Use the skill
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **Google Drive**.
-3. Click **Install**, then complete the Google sign-in prompt.
-
-Or run `/add-plugin google-drive` in chat.
+Load [`google-drive`](skills/google-drive/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

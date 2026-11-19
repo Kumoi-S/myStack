@@ -4,11 +4,9 @@ Advisor gives Cursor's agent a stronger second model to consult at key points: b
 
 The default advisor is the latest Grok (Grok 4.6) at its highest reasoning effort. Because the advisor is a subagent with its own model, it does not have to be the model you are chatting with: any model available to subagents works, so a second opinion can come from a different model family.
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin advisor
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Quick start
 
@@ -80,7 +78,14 @@ Each consult is one call to the advisor model with a briefing of a few thousand 
 
 - State is per project, bound to the conversation that enabled it. Running `/advisor` in a second conversation on the same project re-binds the mode there (model and nudge settings carry over; the consult history and advisor context start fresh). Use `/advisor status` to look without re-binding.
 - The transcript path is recorded by hooks, so the advisor only reads the full transcript when hooks run and transcripts are enabled. It always receives the briefing.
-- The end-of-turn nudge relies on the plugin's hooks; where hooks do not run, the skill still performs the pre-completion consult on its own.
+- The skill can perform the pre-completion consult independently. For automatic tracking in Cursor, register the following scripts from [hooks/](hooks/) using their absolute paths.
+
+| Cursor event | Script |
+| --- | --- |
+| `afterFileEdit` | `mark-pending.sh` |
+| `afterAgentResponse` | `capture-response.sh` |
+| `subagentStop` with matcher `^advisor-subagent$` | `record-consult.sh` |
+| `stop` with loop limit 3 | `stop-hook.sh` |
 
 ## License
 

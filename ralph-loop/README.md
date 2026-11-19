@@ -4,13 +4,11 @@ Ralph Loop runs Cursor in a self-referential loop, feeding the same prompt back 
 
 ## How it works
 
-Two hooks drive the loop. An `afterAgentResponse` hook watches each response for a `<promise>` tag matching the completion phrase. A `stop` hook fires when Cursor finishes a turn. If the promise hasn't been detected and the iteration limit hasn't been reached, the stop hook sends the original prompt back as a `followup_message`, starting the next iteration. Cursor sees its own previous edits in the working tree and git history, iterates on them, and repeats. The prompt never changes. The code does.
+For automatic iteration in Cursor, register [capture-response.sh](hooks/capture-response.sh) for `afterAgentResponse` and [stop-hook.sh](hooks/stop-hook.sh) for `stop` in your hook configuration, using their absolute paths. Two hooks drive the loop. An `afterAgentResponse` hook watches each response for a `<promise>` tag matching the completion phrase. A `stop` hook fires when Cursor finishes a turn. If the promise hasn't been detected and the iteration limit hasn't been reached, the stop hook sends the original prompt back as a `followup_message`, starting the next iteration. Cursor sees its own previous edits in the working tree and git history, iterates on them, and repeats. The prompt never changes. The code does.
 
-## Installation
+## Use the skills
 
-```
-/add-plugin ralph-loop
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Quick start
 

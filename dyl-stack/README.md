@@ -2,14 +2,9 @@
 
 My agent style, layered on [pstack](../pstack/). pstack does the heavy lifting: principles, playbooks, subagent routing. dyl-stack adds the few gates I keep correcting agents on, a PR review that fits in a paste, and a Figma-to-UI flow that won't call it done until it looks right.
 
-## Install
+## Use the skills
 
-```bash
-/add-plugin pstack
-/add-plugin cursor-team-kit
-/add-plugin thermos
-/add-plugin dyl-stack
-```
+Load [these skills](skills/) alongside [pstack](../pstack/), [cursor-team-kit](../cursor-team-kit/), and [thermos](../thermos/). Register the subagents used by your chosen workflow.
 
 `/build-figma` also needs the Figma plugin and its MCP connected.
 

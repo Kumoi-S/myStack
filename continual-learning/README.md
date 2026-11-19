@@ -2,7 +2,7 @@
 
 Automatically and incrementally keeps `AGENTS.md` up to date from transcript changes.
 
-The plugin combines:
+The workflow combines:
 
 - A `stop` hook that decides when to trigger learning.
 - A `continual-learning` skill that orchestrates the learning flow.
@@ -14,15 +14,13 @@ It is designed to avoid noisy rewrites by:
 - Processing only new or changed transcript files.
 - Writing plain bullet points only (no evidence/confidence metadata).
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin continual-learning
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## How it works
 
-On eligible `stop` events, the hook may emit a `followup_message` that asks the agent to run the `continual-learning` skill.
+Invoke the skill directly for a manual memory update. In Cursor, if you register `bun run /absolute/path/to/continual-learning/hooks/continual-learning-stop.ts` for the `stop` event, it may emit a `followup_message` that asks the agent to run the `continual-learning` skill.
 
 The skill is marked `disable-model-invocation: true`, so it will not be auto-selected during normal model invocation. When it does run, it delegates the full memory update flow to `agents-memory-updater`.
 
@@ -42,7 +40,7 @@ Default cadence:
 - minimum 120 minutes since the last run
 - transcript mtime must advance since the previous run
 
-Trial mode defaults (enabled in this plugin hook config):
+Trial mode defaults (when enabled through the hook environment):
 
 - minimum 3 completed turns
 - minimum 15 minutes

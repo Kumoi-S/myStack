@@ -4,13 +4,9 @@ Cursor plugin that connects agents to [Google Sheets](https://sheets.google.com)
 
 Read spreadsheet metadata and cell ranges, create spreadsheets, write and append values, clear ranges, and manage sheet tabs.
 
-## Install
+## Use the skill
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **Google Sheets**.
-3. Click **Install**, then complete the Google sign-in prompt.
-
-Or run `/add-plugin google-sheets` in chat.
+Load [`google-sheets`](skills/google-sheets/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

@@ -4,13 +4,9 @@ Cursor plugin that connects agents to [Google Slides](https://slides.google.com)
 
 Read presentation structure and text, create presentations, add and reorder slides, insert text boxes, shapes, images, and tables, style text and backgrounds, and render any slide as a PNG thumbnail.
 
-## Install
+## Use the skill
 
-1. Open **Cursor Settings → Plugins**.
-2. Search for **Google Slides**.
-3. Click **Install**, then complete the Google sign-in prompt.
-
-Or run `/add-plugin google-slides` in chat.
+Load [`google-slides`](skills/google-slides/SKILL.md) and connect the corresponding MCP service in your agent.
 
 ## MCP
 

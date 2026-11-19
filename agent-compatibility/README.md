@@ -78,10 +78,6 @@ npx -y agent-compatibility@latest . --config ./agent-compatibility.config.json
 
 The scanner is heuristic. It scores repo signals and surfaces likely friction, but it is not a full quality verdict on the codebase.
 
-## Local install
+## Use the skill
 
-If you want to use this plugin directly, symlink this directory into:
-
-```bash
-~/.cursor/plugins/local/agent-compatibility
-```
+Load [skills/check-agent-compatibility/](skills/check-agent-compatibility/) in your agent's skill directory. Register the definitions in [agents/](agents/) if your agent supports custom subagents.

@@ -29,19 +29,9 @@ Ask about the Origin API, or ask to port a GitHub App, and the matching skill
 loads. In Cursor you can also run `/origin-api` or
 `/port-github-app-to-origin`.
 
-## Install in Cursor
+## Use the skills
 
-Search for Origin Apps in the Cursor Marketplace
-([cursor.com/marketplace/origin-apps](https://cursor.com/marketplace/origin-apps)),
-or open Customize, find the plugin, and install it at user or project scope.
-
-## Use outside Cursor
-
-The skills use only portable [Agent Skills](https://agentskills.io)
-frontmatter. In Claude Code: `/plugin marketplace add cursor/plugins` then
-`/plugin install origin-apps@cursor-plugins`. Any other agent: copy
-`origin-apps/skills/*` into its skills folder (copy both; the porting skill
-refers to `origin-api`).
+Copy both directories from [skills/](skills/) into your agent's skill directory. The porting skill refers to `origin-api`.
 
 ## Requirements
 

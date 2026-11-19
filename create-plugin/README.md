@@ -2,11 +2,9 @@
 
 Meta workflows for creating Cursor plugins that are marketplace-ready.
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin create-plugin
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Components
 

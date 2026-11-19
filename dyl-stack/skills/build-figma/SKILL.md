@@ -10,7 +10,7 @@ color: magenta
 
 Orchestrator for Figma → production UI. It does **not** replace the skills below. Read each when that phase starts; do not restate them here.
 
-**Requires** `figma` (plugin and connected MCP) and `cursor-team-kit`. Check first with [../dyl-mode/references/requirements.md](../dyl-mode/references/requirements.md). Missing → stop and tell the user to run `/add-plugin <name>`.
+**Requires** `figma` (plugin and connected MCP) and `cursor-team-kit`. Check first with [../dyl-mode/references/requirements.md](../dyl-mode/references/requirements.md). If a dependency is missing, tell the user which skills, agents, or tools to load.
 
 Failure modes that shaped the gates: [references/failure-lessons.md](references/failure-lessons.md).
 

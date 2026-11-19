@@ -1,12 +1,10 @@
-# Teaching plugin
+# Teaching
 
 Teaching workflows: skill mapping, practice plans, and feedback loops.
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin teaching
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Components
 

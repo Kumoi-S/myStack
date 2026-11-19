@@ -1,0 +1,5 @@
+interface:
+  display_name: "less-ai-tone"
+  short_description: "按明确规则减少 AI 写作痕迹，尽量保持原文不变"
+policy:
+  allow_implicit_invocation: false

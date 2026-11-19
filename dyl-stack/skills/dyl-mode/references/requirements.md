@@ -1,8 +1,8 @@
 # Requirements
 
-dyl-stack layers on other plugins. Check the ones your skill needs before any work. If one is missing, stop, name it, and tell the user to run `/add-plugin <name>`. Do not improvise the missing piece.
+dyl-stack uses skills and subagents from other collections. Check the dependencies your workflow needs. Use the sibling collections in this checkout or load them in your agent. If a required skill, subagent, or MCP connection is unavailable, name it before continuing.
 
-| Plugin | Installed when | Reach its files |
+| Collection or integration | Available when | Reach its files |
 |---|---|---|
 | `pstack` | `setup-pstack` is in your skill list | Most pstack skills are slash-only and hidden from the list. They sit beside `setup-pstack`: `<setup-pstack dir>/../poteto-mode/SKILL.md`, `../poteto-mode/playbooks/<name>.md`, `../principle-<name>/SKILL.md`, `../bro/SKILL.md`, `../unslop/SKILL.md`. |
 | `cursor-team-kit` | `control-ui`, `verify-this`, and `deslop` are in your skill list | Their listed paths. |

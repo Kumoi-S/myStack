@@ -1,12 +1,10 @@
-# Thermos plugin
+# Thermos
 
 Thermo-nuclear branch review for Cursor agents: deep correctness and security audits, harsh maintainability rubrics, and parallel subagent orchestration.
 
-## Installation
+## Use the skills
 
-```bash
-/add-plugin thermos
-```
+Load the directories under [skills/](skills/) in your agent's skill directory, or open their `SKILL.md` files directly.
 
 ## Architecture
 
