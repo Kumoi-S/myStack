@@ -28,10 +28,9 @@
 
 ## 推荐阅读顺序
 
-1. 先读各厂商 `README.md` 的模型选择矩阵。
-2. 再读对应模型专属文件，确认默认 reasoning/thinking 设置和模型行为变化。
-3. 需要构建 API 应用时，再读 Function Calling、Structured Output、Prompt Caching 和 Evals 文件。
-4. 最后阅读 [`cross-vendor-comparison.md`](cross-vendor-comparison.md)，对照三家在提示词结构、推理控制和工具调用上的差异。
+1. 写提示词时，先读[怎样给模型写提示词](prompt-writing-guide.md)。里面有三家共用的写法、可直接改用的中文示例和各型号的注意事项。
+2. 需要进一步了解某款模型时，从对应厂商的 README 进入型号指南。
+3. 开发 API 应用时，再查阅工具调用、结构化输出、缓存和评测的专题文档。
 
 ## 使用注意
 
