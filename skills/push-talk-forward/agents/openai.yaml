@@ -1,5 +1,0 @@
-interface:
-  display_name: "push-talk-forward"
-  short_description: "Advance the current discussion toward a complete, reviewable proposal"
-policy:
-  allow_implicit_invocation: false

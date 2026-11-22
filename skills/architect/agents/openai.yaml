@@ -1,5 +1,0 @@
-interface:
-  display_name: "architect"
-  short_description: "Create or revise a technical design for a change."
-policy:
-  allow_implicit_invocation: false

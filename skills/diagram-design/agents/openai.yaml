@@ -1,5 +1,0 @@
-interface:
-  display_name: "diagram-design"
-  short_description: "Build beautiful diagrams"
-  allow_implicit_invocation: false
-

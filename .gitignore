@@ -30,6 +30,7 @@ venv/
 # Build outputs
 dist/
 build/
+/releases/
 
 # Logs
 *.log

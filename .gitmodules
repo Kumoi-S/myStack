@@ -1,0 +1,6 @@
+[submodule "sources/cursor-plugins"]
+	path = sources/cursor-plugins
+	url = https://github.com/cursor/plugins.git
+[submodule "sources/mattpocock-skills"]
+	path = sources/mattpocock-skills
+	url = https://github.com/mattpocock/skills.git

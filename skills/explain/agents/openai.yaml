@@ -1,5 +1,0 @@
-interface:
-  display_name: "explain"
-  short_description: "Explain existing systems, implementations, and proposed designs, including how they work, why key decisions were made, and their trade-offs. Use when a clear, evidence-grounded technical explanation is needed."
-policy:
-  allow_implicit_invocation: false
