@@ -4,3 +4,6 @@
 - `prompting-guides/` 存放提示词参考资料
 - 从仓库根目录运行 `uv sync --locked`，按 `uv.lock` 创建本机的 `.venv`。Python 版本由 `.python-version` 指定
 - `releases/<版本>/` 存放独立的运行快照
+
+## 约定
+- 总是使用python脚本，通过`uv run`运行
