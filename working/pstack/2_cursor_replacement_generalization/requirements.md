@@ -24,8 +24,8 @@ The left column pairs source terms with their context. The right column shows ho
 
 | Source term and context | Example rewrite |
 | --- | --- |
-| `Task`, `Agent`<br>Delegation to a subagent | Delegate the task to a subagent and collect its result. |
-| `subagent_type`<br>Role selection for a delegated task | Give the worker the instructions for the assigned role. |
+| `Task`, `Agent`<br>Delegation to a subagent | Delegate the task to a fresh-context subagent and collect its result. |
+| `subagent_type`<br>Role selection for a delegated task | Give the subagent the instructions for the assigned role. |
 | `subagent_type: generalPurpose`, `general-purpose`<br>Worker with a task brief | Give the brief to a general-purpose subagent. |
 | `poteto-agent`, `pstack:poteto-agent`<br>Delegation from a poteto-mode playbook | Give the worker the absolute paths to `worker.md` and `poteto-mode/SKILL.md`. As the parent, follow the playbook and integrate the result. |
 | `comment-sicko`, `pstack:comment-sicko`<br>Comment review of an agreed scope | Ask the bundled comment reviewer to inspect the specified files or diff and report findings without editing files. |
