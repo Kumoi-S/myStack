@@ -7,8 +7,8 @@
 
 ## Review and rewrite
 
-1. **Review with the user.** Inspect every skill and its supporting files, including playbooks, references, agent definitions, guides, and scripts. Find platform-specific wording and behavior, including in shared helpers. Present the proposed changes for one review before editing the output. Group open questions with the file and passage, the original behavior, and the decision needed. Wait for the user to confirm the proposed changes and resolve the open questions before rewriting.
-2. **Rewrite the original instructions.** Copy the snapshot to `./output/` and apply the reviewed changes directly to the skill text and supporting files there. Remove `docs/harness/claude-code.md` from the output along with all directions and links that point to it.
+1. Check whether these requirements miss any passages that need changes.
+2. Use the Claude Code adapter as a reference when revising the original text, then remove the adapter from the output.
 
 ## Acceptance criteria
 
