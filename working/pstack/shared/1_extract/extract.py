@@ -196,7 +196,7 @@ def extract(root: Path, output: Path) -> str:
 def main() -> int:
     stage = Path(__file__).resolve().parent
     try:
-        print(extract(stage.parents[2], stage / "output"))
+        print(extract(stage.parents[3], stage / "output"))
     except (OSError, ValueError, tarfile.TarError) as error:
         print(f"Extraction failed: {error}", file=sys.stderr)
         return 1

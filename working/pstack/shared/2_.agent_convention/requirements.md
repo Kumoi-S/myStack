@@ -1,6 +1,6 @@
-# Stage 3 — pstack `.agent/` paths
+# Stage 2 — pstack `.agent/` paths
 
-Read `../2_cursor_replacement_generalization/output/` and write `./output/`. Resolve `.agent/` paths from the target checkout root.
+Read `../1_extract/output/` and write `./output/`. Resolve `.agent/` paths from the target checkout root.
 
 | Workflow | Current path | New default |
 | --- | --- | --- |

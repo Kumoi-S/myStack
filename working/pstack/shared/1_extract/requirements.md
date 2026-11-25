@@ -13,7 +13,7 @@ Produce a reproducible pstack Claude Code snapshot in `./output/` for Stage 2. K
 Run the extraction tool from the repository root.
 
 ```powershell
-uv run --locked working/pstack/1_extract/extract.py
+uv run --locked working/pstack/shared/1_extract/extract.py
 ```
 
 ## Constrain
@@ -36,7 +36,7 @@ Accept normal Git checkout line-ending conversions when comparing the working co
 
 ## Done Check
 
-- A successful run leaves the complete verified subtree directly in `./output/`, including the Claude Code adapter used by [Stage 2](../2_cursor_replacement_generalization/requirements.md).
+- A successful run leaves the complete verified subtree directly in `./output/`, including the Claude Code adapter used in Stage 4 of the [generic fork](../../forks/generic/4_cursor_replacement_generalization/requirements.md) and the [Codex fork](../../forks/codex/4_cursor_replacement_generalization/requirements.md).
 - An unchanged rerun reuses the snapshot. A clean upstream update with a staged gitlink replaces a clean older snapshot.
 - A rejected source or output validation returns a nonzero exit and preserves any existing output.
 

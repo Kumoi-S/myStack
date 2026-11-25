@@ -1,6 +1,6 @@
 # Stage 5 — Add Codex invocation policy
 
-Use `../4_autoPR_remove/output/` as input and write the result to `./output/`.
+Use `../4_cursor_replacement_generalization/output/` as input and write the result to `./output/`.
 
 For each `SKILL.md` with `disable-model-invocation: true` in its frontmatter, create `agents/openai.yaml` in the skill directory if the file is missing. Leave any existing `agents/openai.yaml` untouched.
 
