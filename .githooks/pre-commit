@@ -1,0 +1,2 @@
+#!/bin/sh
+exec uv run --no-sync python working/tools/clean_gitkeeps.py --staged

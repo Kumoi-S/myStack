@@ -7,3 +7,4 @@
 
 ## 约定
 - 总是使用python脚本，通过`uv run`运行
+- `working/*/<stage>/requirements.md` 是该stage的唯一事实，其余文档、工具都对该 requirements 负责，在任何时刻除非用户要求，否则 `requirements.md` 不得被修改
