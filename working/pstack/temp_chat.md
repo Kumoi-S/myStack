@@ -2384,3 +2384,70 @@ Agent 在 skill 文档里额外指定了 `chart/`。**建议修 Stage 2 产物�
 - **Stage 5.1** 的复核意见已由原 Agent 修正，包括 `open-a-pr` 自调用、失效的 Claude 适配器链接、Codex 子代理参数，以及 worktree 审计缺少聊天记录时的处理。
 
 5.2 尚未执行。你审定后，把文档状态改为 `done`，再发出执行 5.2 的指令即可。
+
+> [$skill-creator](C://Users//smy//.codex//skills//.system//skill-creator//SKILL.md) 本轮对话，我觉得挺有意思，就是我让agent自己开subagents替我走流程。这种交互模式抽取一个skill
+
+<details><summary>2 previous messages</summary>
+
+> 我会用 `skill-creator` 和 `writing-for-agents` 把这次协作方式写成一个可复用的 skill，重点保留三件事：每阶段用新 Agent、主 Agent 独立验收、出错时由原 Agent 修订。先看仓库里自建 skill 放在哪里。
+>
+> <details><summary>Ran 23 commands</summary>
+>
+> - Ran `Get-Content -Raw -Encoding utf8 C:/Users/smy/.codex/skills/.system/skill-creator/SKILL.md`
+> - Ran `Get-ChildItem Env:CODEX_HOME -ErrorAction SilentlyContinue`
+> - Ran `Get-Content -Raw -Encoding utf8 C:/Users/smy/.codex/RTK.md`
+> - Ran `Get-ChildItem -Force -Name`
+> - Ran `Get-Content -Raw -Encoding utf8 C:/Users/smy/.agents/skills/writing-for-agents/SKILL.md`
+> - Ran `rg --files -g '!sources/**' -g '!**/output/**' -g '!releases/**' -g '!uv.lock' | Select-Object -First 120`
+> - Ran `Get-ChildItem -Force -Name sources,working,releases`
+> - Ran `Get-Content -Raw -Encoding utf8 C:/Users/smy/.codex/skills/.system/skill-creator/scripts/quick_validate.py`
+> - Ran `Get-Content -Raw -Encoding utf8 C:/Users/smy/.agents/skills/writing-for-agents/SKILL-MECHANICS.md`
+> - Ran `Get-ChildItem -Directory C:/Users/smy/.codex/skills,C:/Users/smy/.agents/skills | Select-Object -ExpandProperty Name`
+> - Ran `Get-Content -Raw -Encoding utf8 pyproject.toml`
+> - Ran `Get-ChildItem -Force -Name releases/v0.1.2`
+> - Ran `Get-Content -Raw -Encoding utf8 .gitignore`
+> - Ran `Get-Content -Raw -Encoding utf8 sources/SOURCES_ETC.md`
+> - Ran `Get-ChildItem -Force -Recurse sources/mine,working/mine -Depth 3 | Select-Object -ExpandProperty FullName`
+> - Ran `Get-Item -Force C:/Users/smy/.agents/skills/show-me,C:/Users/smy/.codex/skills,C:/Users/smy/Desktop/agent-workbench/sources/mine | Select-Object FullName, LinkType, Target`
+> - Ran `Get-Content -Encoding utf8 -TotalCount 26 sources/mine/show-me/SKILL.md`
+> - Ran `Get-Content -Encoding utf8 -TotalCount 26 sources/mine/session-review/SKILL.md`
+> - Ran `@'
+> from pathlib import Path
+>
+> skill_dir = Path("sources/mine/orchestrate-stages")
+> skill_dir.mkdir()
+> with (skill_dir / "SKILL.md").open("x", encoding="utf-8", newline="\n") as file:
+>     file.write("---\nname: orchestrate-stages\ndescription: Run an existing workflow one stage at a time when the user wants a fresh subagent to own each stage and the main agent to supervise, verify results, and handle handoffs.\n---\n\n# Orchestrate stages\n\nStart at the first stage the user asked to run. Read its requirements and locate its actual input. Keep its steps together under one worker, including any pause for human review. Change requirements only at the user's request.\n\n1. **Dispatch one stage.** Start a fresh subagent without forking the conversation. Give it the stage requirements, input location, permitted output, and any user decision that affects this stage. Ask it to produce the output, verify it, and report what it checked. Keep its agent ID for follow-up.\n2. **Observe and verify.** The worker makes the changes. As coordinator, inspect the actual output yourself. Compare it with the requirements and the input it will replace or pass on. Check a concrete behavior where a change could affect existing callers. For example, if only a scratch path should change, check that omitting an optional argument still gives the original default.\n3. **Handle a discrepancy.** Stop the worker if it is still making the faulty change, and hold later stages. Show the expected behavior, what you observed, and the smallest correction. Identify whether the worker departed from the requirements, the requirements conflict with the user's intent, or a choice needs the user's decision. An existing default usually settles a choice the stage never asked to change.\n4. **Return the correction to its owner.** If the user asked to stop and report, wait for their direction. When a correction is authorized, resume the same worker with the evidence, then independently check its revised output. If the same problem persists, report what is still failing before another attempt.\n5. **Hand off.** After verification passes, give the next fresh subagent the accepted output as its input. At a human review step, link the editable artifact, state what decision is due, and stop. Resume under that stage's stated approval conditions.\n\nReport each handoff briefly. On completion or a stop, identify the last accepted stage, the current artifact, and any work still pending.\n")
+>
+> '@ | uv run --no-cache --no-sync python -B -X utf8 -`
+> - Ran `uv run --no-cache --no-sync python -B -X utf8 C:/Users/smy/.codex/skills/.system/skill-creator/scripts/quick_validate.py sources/mine/orchestrate-stages`
+> - Ran `git status --short --untracked-files=all --ignore-submodules=all -- sources/mine/orchestrate-stages`
+> - Ran `uv run --no-cache --no-sync python -B -c "import _winapi; print(hasattr(_winapi, 'CreateJunction'))"`
+> - Ran `@'
+> from pathlib import Path
+> import os
+> import _winapi
+>
+> source = Path("C:/Users/smy/Desktop/agent-workbench/sources/mine/orchestrate-stages").resolve(strict=True)
+> skills = Path("C:/Users/smy/.codex/skills").resolve(strict=True)
+> link = skills / "orchestrate-stages"
+> if os.path.lexists(link):
+>     if not link.samefile(source):
+>         raise FileExistsError(link)
+> else:
+>     _winapi.CreateJunction(str(source), str(link))
+> assert (link / "SKILL.md").samefile(source / "SKILL.md")
+> print(link)
+>
+> '@ | uv run --no-cache --no-sync python -B -X utf8 -`
+>
+> </details>
+</details>
+
+已创建 [`$orchestrate-stages`](./sources/mine/orchestrate-stages/SKILL.md)，已链接到个人 Codex skills 目录并通过格式校验。
+
+它保留了这次协作的分工：**每个 stage 由一个全新上下文的 subagent 执行，主 Agent 负责编排、观察和独立验收。** 发现偏差时暂停后续阶段，说明是执行出错、需求冲突，还是需要人做决定。修订交回原 subagent，验收通过才继续。遇到人工审定点，就交付可编辑文件并停下。
+
+下次可以直接说：
+
+> 用 `$orchestrate-stages` 从 Stage 2 开始跑。发现问题先停下，告诉我原因和建议。
