@@ -1,5 +1,5 @@
 ---
-status: ready-for-human
+status: wait-for-check
 ---
 
 # pstack in Codex
