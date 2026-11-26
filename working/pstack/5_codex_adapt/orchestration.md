@@ -1,14 +1,51 @@
 # Stage 5 编排
 
-本文件供主代理使用。三个子阶段的工作要求分别见 [5.1 编写](requirements-5.1.md)、[5.2 检查](requirements-5.2.md) 和 [5.3 生成](requirements-5.3.md)。每个子阶段由独立的新子代理执行。主代理保留本轮 5.1 子代理的 ID，负责交接文件、核对实际产物和执行停点。
+主代理按稿件状态交接。三个子阶段分别遵循 [5.1 编写](requirements-5.1.md)、[5.2 检查](requirements-5.2.md) 和 [5.3 生成](requirements-5.3.md)。
 
-1. **起稿。** 启动或明确重跑 Stage 5 时，把 5.1 的 requirements、上游适配器和 Stage 4 底稿的位置交给新的 5.1 子代理。读回本目录的 `cursor-codex.md`，确认稿件状态是 `wait-for-check`。
-2. **送检。** 为本轮选择主代理、5.1 和 5.2 均可访问的临时目录。将目录的绝对路径、映射稿和 5.2 的 requirements 交给新的 5.2 子代理。收到结果后，读回映射稿的状态。
-   - `Unqualified` 表示 5.2 提出了返修意见。读回审阅文件，进入第 3 步。
-   - `ready-for-human` 表示检查通过。向人提供可编辑的映射稿，停止本轮编排，等待人工审定。
-3. **审查返修意见。** 主代理对照 [5.2 的检查要求](requirements-5.2.md) 和意见所引的底稿调用点，逐项判断改动是否必要，是否追求原 skill 未要求的细节，以及改后两列能否在同一层次逐行对应。例如，工具名与工具名对应，Codex 特有的限制或回退紧跟该行加注。
-   - 意见不合理或依据尚未查明时，将该项和疑点发回出具意见的 5.2 子代理重审。收到修订结论后，按第 2 步读回状态。
-   - 意见均已核实且确需返修时，将审阅文件的绝对路径交给本轮原来的 5.1 子代理。保留临时文件，待 5.1 修改并重新提交 `wait-for-check` 后，回到第 2 步派新的 5.2 子代理复查。
-4. **生成。** 人将映射稿标为 `done` 并给出执行指令后，才把定稿、Stage 4 底稿和 5.3 的 requirements 交给新的 5.3 子代理。按 5.3 的要求核对 `output/`。
+```text
+IF 首次启动或明确重跑 Stage 5
+    DISPATCH 新的 5.1 子代理，传入 requirements-5.1.md、上游适配器路径和 Stage 4 底稿路径
+    保留本轮 5.1 子代理 ID
+    读回 cursor-codex.md，确认 status 为 wait-for-check
 
-继续已有流程时，按稿件状态接手。`wait-for-check` 送检，`Unqualified` 先按第 3 步审查该稿的临时审阅文件，`ready-for-human` 停在人工审定处，`done` 按第 4 步处理。原 5.1 子代理已不可恢复时，给新的 5.1 子代理同一稿件和已核实的审阅文件。审阅文件已丢失时，重新派 5.2 检查该稿并给出结果。
+LOOP 从 cursor-codex.md 的 frontmatter 读回当前 status
+    CASE wait-for-check
+        送检当前稿
+
+    CASE Unqualified
+        IF 该稿的审阅文件已丢失
+            送检当前稿
+            CONTINUE
+
+        读回审阅文件，对照 requirements-5.2.md 和每项意见引用的底稿调用点
+        逐项核实改动是否必要、是否超出原 skill 的要求、改后两列是否仍在同一层次
+        工具名与工具名对应，Codex 特有的限制或回退紧跟对应行加注
+        IF 有意见不合理或依据尚未查明
+            将该项意见和疑点交回出具意见的 5.2 子代理重审
+            等待修订结论
+            CONTINUE
+
+        IF 本轮 5.1 子代理已不可恢复
+            DISPATCH 新的 5.1 子代理，传入 requirements-5.1.md、同一稿件和已核实的审阅文件绝对路径
+            保留接手者的 ID，供本轮后续返修使用
+        ELSE
+            将已核实的审阅文件绝对路径交回本轮 5.1 子代理
+        返修期间保留临时文件
+        等待返修，读回稿件，确认 status 为 wait-for-check
+
+    CASE ready-for-human
+        向用户交付可编辑的 cursor-codex.md，请其审定
+        STOP
+
+    CASE done
+        IF 尚未收到用户的生成指令
+            STOP 等待指令
+        DISPATCH 新的 5.3 子代理，传入 requirements-5.3.md、人工定稿和 Stage 4 底稿路径
+        按 requirements-5.3.md 核对 output/，交付核验通过的产物
+        STOP
+
+ON 送检当前稿
+    选用本轮主代理、5.1 和 5.2 均可访问的临时目录
+    DISPATCH 新的 5.2 子代理，传入 requirements-5.2.md、当前稿和临时目录的绝对路径
+    等待检查结果，保留审阅文件路径（如有）
+```
