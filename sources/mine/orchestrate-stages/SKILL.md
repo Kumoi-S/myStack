@@ -21,15 +21,17 @@ ON "DISPATCH"
     Start the fresh subagent without forking the conversation
     Give it the only requirements.md as input, if user have special instructions, append them in input
 
-ON worker completion
-    Inspect the actual output against its requirements and user's special instructions before handing it off
-    WHILE a correction is needed and work can proceed
+ON worker completion OR a worker pause for human edits or review
+    Inspect the actual output against every requirement and user instruction due before handoff
+    WHILE a correction is needed and the worker can make it
         Hold downstream work and follow the stage's correction instructions
         If none are given, send the evidence to the responsible worker
         Check the revised output against the same requirements and user instructions
-    IF human review is due or work is blocked
-        Report the current artifact and the decision or blocker
+    IF any requirement due before handoff is unmet or unverified, or work is blocked
+        Report the current artifact, the outstanding issue, and what is needed to proceed
         STOP the workflow
+    IF human edits or review are due
+        Hand the verified artifact to the user, state the requested action, and STOP the workflow
 ```
 
 The requirements define the work. Change them only at the user's request.
