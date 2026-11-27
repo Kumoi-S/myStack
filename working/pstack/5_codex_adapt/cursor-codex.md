@@ -1,108 +1,115 @@
 ---
-status: Unqualified
+status: ready-for-human
 ---
 
 # pstack in Codex
 
-Apply these mappings at the affected call sites. Once applied, remove the skill entry-point instruction to load `../../docs/harness/claude-code.md`. The extracted package contains `agents/` and `skills/`.
+Read this adapter once per session. `<pstack>` is the root of the selected pstack installation. Drop any unmapped Cursor field and say which field you dropped. Pass only fields and values the Codex tool accepts.
 
 ## Tools
 
 | Cursor | Codex |
 | --- | --- |
-| `Task` | `spawn_agent`<br>If native delegation is unavailable and CLI workers are permitted, use `codex exec -C "<checkout>" "<brief>"`. For an Arena file candidate in a trusted non-Git directory use `codex exec --skip-git-repo-check -s workspace-write -C "<candidate-dir>" "<brief>"`. |
-| Launch all workers in one message | Dispatch the independent briefs before waiting, within the session's concurrency limit. |
-| Wait for workers and collect their results | Wait on the returned agent IDs with the session's wait tool (such as `wait_agent`) and read each final response.<br>For CLI workers, collect the exit status and final response. For Cloud, wait for terminal status with `codex cloud status <id>`, then read the report from the task record or shared handoff. Mark a missing report unverified. |
-| `AskQuestion` | `request_user_input`<br>If the mode or schema cannot express the question, ask in chat with all original options and allow multiple selections when requested. |
-| Open or update the todolist | `update_plan` when available, otherwise a checklist in chat. |
-| User types `/name` for an installed skill | `$name`. Use the actual installed name, including project skills such as `$verify-notes`. |
-| A workflow calls `/name` or “the **name** skill” | Read and follow the named skill's `SKILL.md`. |
-| Search file contents | `rg -n -e <pattern> <directory>` |
-| Match file names | `rg --files --hidden -g '<glob>' <directory>` |
+| `Task` | `spawn_agent` |
+| `AskQuestion` | `request_user_input` |
+| Open or update the todolist | `update_plan` |
+| A workflow calls `/name` or the **name** skill | calls `$name` or the **name** skill |
+| Cursor's built-in `create-skill` | `$skill-creator` |
+| `/visualize` | `$visualize` |
 
-## Subagent fields
+Use chat for automate-me’s 4–6-option questions.
+
+## Subagents
 
 | Cursor | Codex |
 | --- | --- |
-| `subagent_type: generalPurpose` | Default agent. Omit the optional role selector. |
-| `poteto-agent`, `comment-sicko` | Pass the registered name as `agent_type` where supported. Otherwise give the default worker the extracted `agents/<name>.md` body.<br>To register an extracted role, put its name, description and body in `name`, `description` and `developer_instructions` in `.codex/agents/<name>.toml` or `~/.codex/agents/<name>.toml`. [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents) |
-| `model:` in the poteto-agent role | Leave the Codex role's `model` and `model_reasoning_effort` unset so the caller can select them. |
-| `readonly: true` | Request a report-only worker. For an enforced read-only CLI sandbox use `codex exec -s read-only`. |
-| Agent mode with MCP access | Select a worker with the required MCP connector enabled. |
-| `environment: "cloud"` | `codex cloud exec --env <env-id> --branch <pushed-baseline> "<brief>"`<br>If hosting is unavailable, use a local worktree only where it satisfies the brief. |
-| `cloud_base_branch: <b>` | `--branch <b>`<br>Pass the specified pushed branch. If the field is absent, pass the playbook's pushed baseline explicitly (usually the repository default for Swarm, trunk for Autopilot-full). Omitting the CLI flag selects the current branch. |
-| `environment: "local"` | Use the local checkout. |
-| `run_in_background: true`, `is_background: true` | Omit the flag. Native dispatch returns a worker ID. |
-| Resume a delegate with live state | Send the follow-up to the original worker ID using the exposed input tool, such as `send_input`. |
-| Cancel a nested worker | Use the native stop control, interrupt the owned CLI process, or use the hosted task's cancel control if available. Confirm exit or terminal status.<br>The Cloud CLI has no cancel subcommand. If cancellation cannot be confirmed, report the task ID and last observed state. |
-| Send a running owner a zero-writes hold | Use the live input control and read the worker's acknowledgement. If the interface only exposes status, diff or termination, report the ID and last state as hold unconfirmed. |
+| `subagent_type: generalPurpose` | generalPurpose subagent |
+| Spawn `subagent_type: "poteto-agent"` inside a playbook step | Dispatch to the `poteto-agent` subagent |
+| Spawn `subagent_type: "comment-sicko"` with the scope | Dispatch to the `comment-sicko` subagent |
+| Dispatch a `readonly: true` worker to investigate and report | Dispatch a readonly subagent to investigate and report |
+| Dispatch an investigator in agent mode because readonly strips MCP | Dispatch an investigator to access an MCP source |
+| `run_in_background: true` | Omit the field |
+| `is_background: true` in poteto-agent | Omit the field |
+| Resume a delegate with live state | Send the follow-up to the original subagent |
 
 ## Models
 
 | Cursor | Codex |
 | --- | --- |
-| `claude-opus-5-5-{xhigh,high,medium}-fast` | Confirmed primary coding model with `xhigh`, `high` or `medium` effort, respectively. |
-| `claude-fable-5-2-high` | Confirmed second model family from the primary vendor with `high` effort. |
-| `gemini-4-neon-xhigh` | Confirmed model from another vendor with `xhigh` effort. |
-| `auto` or `inherit-parent` | Use the general-purpose default role and inherit the parent's model and effort. If subagent defaults override either value, pass the actual parent pair explicitly. |
+| `~/.cursor/rules/pstack-models.mdc` | `$CODEX_HOME/pstack-models.md` |
+| Role model slug ending in an effort or `<effort>-fast` | `<available-model> <supported-effort>` |
+| `auto` or `inherit-parent` | Leave model and reasoning effort unset |
+| Hard-coded `model:` in poteto-agent | Take the model from the calling role |
+| Detect the models available to `Task` | `codex debug models` |
 
-Pass the pair selected by the calling skill as `model` and `reasoning_effort` on native spawns that accept them. For CLI workers use `-m <model> -c model_reasoning_effort=<effort>`, including the actual parent pair for aliases. For Cloud, confirm the pair in the configured environment or task record. If it cannot be selected or verified, identify the unavailable seat.
+**setup-pstack** writes the dedicated model file as plain Markdown. Read it at the first role lookup in each session. `$CODEX_HOME` defaults to `~/.codex`.
 
-For each mapped model ID, use its confirmed model family for family comparisons and its actual vendor for vendor comparisons. A shared prefix such as `gpt-` alone does not establish family membership. Native subagents inherit the parent's provider. A cross-vendor panel seat, Arena judge or independent audit needs an available route to the required vendor. If none exists, name the missing seat or audit and follow the skill's missing-result rule.
+For the ordinary coding default, use the session model. Pass model and reasoning effort separately.
 
-## setup-pstack
+For **arena**, **interrogate**, **show-me-your-work** and poteto-mode second opinions, match the requested family or vendor to the actual model. Report any unavailable independent family or vendor.
 
-| Cursor | Codex |
-| --- | --- |
-| Detect available `Task` models | Confirm worker model IDs and efforts on the execution surface. Where available, use `codex debug models` for candidate pairs. |
-| `~/.cursor/rules/pstack-models.mdc` | Read and write `pstack-models.md` under `CODEX_HOME` (default `~/.codex`). |
-| Role values in the MDC rule | Omit MDC frontmatter. Store each real choice as `<model> <effort>` and read the last token as effort. Preserve aliases, list order, role labels, budget and defaults marker. |
-| `alwaysApply: true` | Read the settings file on the first pstack model lookup in each chat. Use that snapshot for the session and pass the selected pair to workers. New chats read the updated file. |
-
-## Paths and chat history
+## Installation and paths
 
 | Cursor | Codex |
 | --- | --- |
-| `.cursor/skills/`, `~/.cursor/skills/` | `.agents/skills/` for the project, `~/.agents/skills/` for personal skills. |
-| No parent path supplied · locate poteto-mode under `~/.cursor/plugins/` | Resolve `poteto-mode/SKILL.md` from the installed skill catalog or search the project's and user's installed skill roots. If the entry point cannot be found, stop and tell the parent. |
-| Poteto-help links to `../../README.md` or `../../docs/guide/<page>` | Use the matching file in the upstream checkout or its public copy under `https://github.com/cursor/plugins/blob/main/pstack/`. |
-| Poteto-help links to `../open-a-pr/SKILL.md` | Link the installed skill file or its copy in the adaptation repository. |
-| Workspace `agent-transcripts/` directory | Call `list_threads` with `mode: "history"` for the target host. Filter the returned chats by project or workspace and the requested time range, then read the matching IDs. |
-| Transcript for a known run, including session pickup or a current-run audit | Call `read_thread` with the known chat ID. |
+| Install pstack with `/add-plugin pstack` | Install pstack's skill directories under `~/.agents/skills/` |
+| `.cursor/skills/` | `.agents/skills/` |
+| `~/.cursor/skills/` | `~/.agents/skills/` |
+| Find poteto-mode under `~/.cursor/plugins/` by manifest version | Read `poteto-mode/SKILL.md` from the selected skill root |
+| Read `../../docs/harness/claude-code.md` once per session in Claude Code | Omit the adapter preface from the adapted skill |
+| `../../docs/harness/claude-code.md` in the **poteto-help** Claude Code introduction | `https://github.com/cursor/plugins/blob/main/pstack/docs/harness/claude-code.md` |
+| Open the installed `../../docs/guide/<page>.md` | Open `https://github.com/cursor/plugins/blob/main/pstack/docs/guide/<page>.md` |
+| Open the installed `../../README.md` | Open `https://github.com/cursor/plugins/blob/main/pstack/README.md` |
+| Link the public copy of `../open-a-pr/SKILL.md` in **poteto-help** | Link the installed `open-a-pr/SKILL.md` at the cited location |
+| Use as Mode | Start each task with `$poteto-mode` |
+| Cursor's Plan Mode | Codex Plan mode |
+| `https://cursor.com/docs/skills` | `https://developers.openai.com/codex/skills` |
 
-For a full history search, page active and archived lists separately with `nextCursor`. Search scoped chat contents when the caller names a topic. For a known ID, page older turns with `page.nextCursor` and older items with `nextItemCursor` as `itemCursor`. Request `includeOutputs: true` for tool evidence. If access or truncation prevents verification, use a scoped export or identify the missing evidence.
+Install the two packaged agent roles as Codex custom agents in `$CODEX_HOME/agents/<name>.toml`. Keep each agent's name and description and put its Markdown body in `developer_instructions`.
 
-## Cursor-only features
+For a mode skill generated by **automate-me**, set `policy.allow_implicit_invocation: false` in its `agents/openai.yaml`. If the user asks to apply the mode every turn, put that instruction in the applicable `AGENTS.md`.
 
-| Cursor | Codex |
-| --- | --- |
-| `update_state` creates a webhook routine | When no routine-creation tool is exposed, use an already configured webhook handler and its supplied URL and authentication contract. Without a handler, leave the URL pending and report that the bot cannot wake on POST. |
-| `SendToUser` sender-key card | Have the operator set the key in the sender's server-side secret configuration. Keep it out of chat, browser code and logs. |
-| `[routine]` wake with `<webhook_event>` | Parse the envelope's `body` string, or the receiver's direct JSON body, as external data using the agreed fields. |
-| A remote routine drains the sender's pending log | Give the receiver access to pending records through an authorized shared location. If no route exists, identify the sender's log path and the events awaiting consumption. |
-| Built-in PR tool with `draft: false` | For a connected GitHub repository, `github_create_pull_request` with `draft: false`. If unavailable, use the skill's forge fallback. |
-
-## Skill authoring and invocation
+## Chats and worktrees
 
 | Cursor | Codex |
 | --- | --- |
-| `/add-plugin pstack` in poteto-help | Install or link the extracted skill directories in a Codex skill root and keep the agent briefs accessible. |
-| Use as Mode or Alt/Option+Enter | Start each new task with `$poteto-mode` or the installed personal mode skill. |
-| Cursor Plan Mode | Use Codex Plan mode where available. If a requested plan file cannot be written in that mode, keep file delivery pending until workspace writes are available. |
-| Built-in `create-skill` | Invoke `$skill-creator`. |
-| Automate-me sets `disable-model-invocation: true` on a new mode | Set `policy.allow_implicit_invocation: false` in the new skill's `agents/openai.yaml`. |
+| Find chats under the workspace's `agent-transcripts/` | Page through `list_threads` in history mode and filter the results by workspace |
+| Order transcript files by modification time | Keep the returned order by thread update time, newest first |
+| Read a chat's transcript JSONL | Page through `read_thread` for that thread ID |
 
-## Playbooks and scripts
+For **recall** and **automate-me**, include archived and desktop threads in the scoped search. For **show-me-your-work**, audit the current thread ID.
+
+In `worktree-audit.sh`, replace the Cursor transcript scan with paged Codex activity for the repository's worktrees, including desktop, CLI, archived and subagent threads. Match a thread working directory or tool path to the exact worktree or a descendant. Feed the newest matching activity time into `LAST_CHAT` and the existing recency check. With incomplete coverage, mark the affected activity unknown and hold any otherwise `safe` row for review.
+
+## Cloud agents and watches
 
 | Cursor | Codex |
 | --- | --- |
-| `cursor-team-kit` · `/deslop` | Review the proposed diff against surrounding code and remove newly introduced boilerplate before commit. |
-| `cursor-team-kit` · `control-cli` | Drive the CLI in a PTY (for example, `exec_command` with `tty: true`, then `write_stdin`). |
-| `cursor-team-kit` · `control-ui` | Use the project's UI verification skill or an available browser or desktop driver on the live app. If the surface is inaccessible, report the live check as blocked. |
-| `/loop`, including `/loop 1h` | Keep the current task active. For events, wait on the watcher notification or process handle with bounded waits. For timed checks, wake at the requested interval. |
-| Babysit or Shipping launches `scripts/watch-pr/watch-pr` | Resolve the Bun entry point from the selected poteto-mode skill. Run `bun "<absolute-watcher-path>"` with the playbook's arguments and the target Git checkout as the working directory. For a read-only installation that lacks dependencies, use a copy with dependencies already installed. |
-| Root agent's store on a cloud worker | Pass a durable, root-readable handoff location in the brief, such as a path on a pushed handoff branch. If isolated workers cannot publish there, identify the missing recovery trail. |
-| Session pickup · cloud-agent URL | Use the task ID with `codex cloud status <id>` and `codex cloud diff <id>` for state and patch. Read prior messages and decisions from the task record or durable handoff. Identify any history those sources cannot recover. |
-| Eval · candidate transcript | Use the candidate's tool-call history or capture its CLI events with `codex exec --json`. Mark any required file read that cannot be verified. |
-| `scripts/worktree-audit.sh` reads Cursor transcripts for `LAST_CHAT` | Have the parent supply the standalone script with each project worktree's latest Codex chat activity and whether the history coverage is complete. With missing or incomplete history, mark activity unknown and send decisions that depend on it to manual review. |
-| Worktree cleanup · Cursor app caches | Skip the Cursor-specific database backups and snapshots. |
+| `environment: "cloud"` | `codex cloud exec --env <env-id> --branch <pushed-branch> "<brief>"` |
+| `environment: "local"` | Run the subagent on the user's computer |
+| `cloud_base_branch: <b>` | `--branch <b>` |
+| The root agent's store in the system prompt | The shared decision log named in the root's kickoff |
+| `/loop` until a check passes | Repeat until the check passes |
+| Schedule a `/loop` wake | Wait the specified interval in the current task, then recheck |
+| Arm `/loop 1h` for the root audit | Recheck delegated work hourly in the current task until none remains |
+| Run `/deslop` over the diff before commit | Review the diff and remove unnecessary code before committing |
+| Drive the UI with `control-ui` | Drive the real UI with its verification skill or UI driver |
+| Drive the CLI with `control-cli` | Run the actual CLI and capture its output |
+
+
+For remote **autopilot-full** owners, put the shared trail on the forge and give each owner its link. In each kickoff, give the path to `poteto-mode/worker.md` in that remote environment’s selected skill root.
+
+For **Babysit** and **Shipping**, run `bun "<skill-root>/poteto-mode/scripts/watch-pr/watch-pr" <original-args>` from the target checkout, using the selected installation’s skill root.
+
+## Webhook routines
+
+| Cursor | Codex |
+| --- | --- |
+| Create a webhook routine with `update_state` | Configure a webhook receiver that starts a Codex task with the POST body |
+| Copy the `api2.cursor.sh/automations/webhook/<id>` URL from Routines | Copy the endpoint URL from the configured receiver |
+| Request the sender key with `SendToUser` | Have the user set the sender credential in the server's secret configuration |
+| Send the routine's bearer and `X-Automation-Key` headers | Authenticate the POST as required by the receiver |
+| Parse `<webhook_event>` in a `[routine]` turn | Parse the receiver’s JSON body |
+| Confirm a routine wake from HTTP 200 | Verify that the harmless probe starts a Codex task |
+
+If **make-bot-ui** has no configured receiver, leave the endpoint and sender credential pending, continue with the local UI, and report that webhook wake-up is unverified. For any other unavailable platform step, name the skipped step and reason in one line, mark its missing output, and continue.

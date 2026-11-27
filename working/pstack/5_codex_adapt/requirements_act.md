@@ -1,4 +1,4 @@
-# 5.3 按 cursor-codex.md 生成 Codex 产物
+# 按 cursor-codex.md 生成 Codex 产物
 
 收到人的执行指令后，先确认本目录的 `cursor-codex.md` 已由人审定，frontmatter 为 `status: done`。未审定时停止。
 
